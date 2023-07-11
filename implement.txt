@@ -1,0 +1,19 @@
+# construct a model
+#prior = MultivariateNormal(torch.zeros(2), torch.eye(2))
+prior = TransformedDistribution(Uniform(torch.zeros(2), torch.ones(2)), SigmoidTransform().inv) # Logistic distribution
+
+# RealNVP
+# flows = [AffineHalfFlow(dim=2, parity=i%2) for i in range(9)]
+
+# NICE
+# flows = [AffineHalfFlow(dim=2, parity=i%2, scale=False) for i in range(4)]
+# flows.append(AffineConstantFlow(dim=2, shift=False))
+
+# MAF (with MADE net, so we get very fast density estimation)
+# flows = [MAF(dim=2, parity=i%2) for i in range(4)]
+
+# IAF (with MADE net, so we get very fast sampling)
+# flows = [IAF(dim=2, parity=i%2) for i in range(3)]
+
+# construct the model
+model = NormalizingFlowModel(prior, flows)
